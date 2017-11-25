@@ -14,7 +14,8 @@ air_order = re.findall(r"(?:<tr>)(?:.*)(?:lid=7\">)(\d+ x \d+)(?:.*)(?:lid=7\">)
 files = [f for f in listdir(mypath) if isfile(join(mypath, f))]
 renamed_files = {}
 sanitize_char = "([\"',:&])|(\.\.)"
-order_graph = {}
+order_graph = {"title": {}, "air": {}, "dvd": {}}
+
 # Remove unwanted characters from string.
 def sanitize(string):
     temp = string.replace(" ", '.').replace(",","")\
@@ -44,7 +45,9 @@ def create_graph(air_order, dvd_order):
     for air in air_order:
         for dvd in dvd_order:
             if air[1] == dvd[1]:
-                order_graph[air[0]] = (dvd[0], dvd[1])
+                order_graph["title"][air[1]] = (air[0], dvd[0])
+                order_graph["air"][air[0]] = (dvd[0], dvd[1])
+                order_graph["dvd"][dvd[0]] = (air[0], air[1])
                 break
 
 # Compare file name to episode title. Matches are saved to dictionary with file
